@@ -41,7 +41,8 @@ function callback(error, response, body) {
             to: '+61488844647',
             from: '+61414169906'
         })
-        .then((message) => {console.log("SID: " + message.sid)});
+        .then((message) => {console.log("SID: " + message.sid)}).catch(
+            e => { console.error('Got an error:', e.code, e.message); });
     } else {
         console.log("No new hazards detected!");
     }    
