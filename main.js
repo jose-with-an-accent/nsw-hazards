@@ -3,7 +3,7 @@ const acc_sid = "AC4b5b491f2b9d596ba3a2f4be0b7b738a";
 const auth_token = "4cee7a342ba50759b12bd8e154fc039e";
 const request = require('request')
 const fs = require('fs');
-const cron = require('node-cron');
+const cronJob = require('cron').CronJob;
 const twilio_client = new twilio(acc_sid, auth_token);
 const options = {
     url : 'https://api.transport.nsw.gov.au/v1/live/hazards/incident/all',
@@ -12,8 +12,10 @@ const options = {
         authorization: 'apikey TVEUMJ8aIJ0liPXq7KT1bIfaK1lNIpkPj25C'
     }
 };
-cron.schedule('*/10 * * * *', function() {
-request(options, callback);
+new cronJob({
+    cronTime: '*/10 * * * *',
+    onTick: function() {
+        request(options, callback)
 var messageArray = [];
 function callback(error, response, body) {
     var lastRead = fs.readFileSync('lastRead.txt', "utf8");
@@ -23,10 +25,9 @@ function callback(error, response, body) {
         featuresArray.map((val, ind) => {
             console.log(ind);
             if (val.properties.created > lastRead) {
-                console.log(val.properties.created + " " + lastRead);
+                    fs.writeFileSync('lastRead.txt', info.lastPublished,{encoding:'utf8',flag:'w'});
             if (val.properties.mainCategory == "Accident") {
                 if (distance(val.geometry.coordinates[1], val.geometry.coordinates[0]) < 60) {
-                    fs.writeFileSync('lastRead.txt', info.lastPublished,{encoding:'utf8',flag:'w'});
                     messageArray.push(val.properties.headline);
                 }
             }
@@ -38,8 +39,8 @@ function callback(error, response, body) {
 
         twilio_client.messages.create({
             body: messageArray.join('\n'),
-            to: '+61488844647',
-            from: '+61414169906'
+            to: '+61414169906',
+            from: '+61488844647'
         })
         .then((message) => {console.log("SID: " + message.sid)}).catch(
             e => { console.error('Got an error:', e.code, e.message); });
@@ -47,7 +48,10 @@ function callback(error, response, body) {
         console.log("No new hazards detected!");
     }    
 }
-})
+},
+start: true,
+timeZone: 'Australia/Sydney'
+});
 function distance(lat2, lon2) {
     var lat1 = -33.865143;
     const lon1 = 151.209900;
