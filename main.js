@@ -13,7 +13,7 @@ const options = {
     }
 };
 new cronJob({
-    cronTime: '*/10 * * * *',
+    cronTime: '*/3 7-19 * * *',
     onTick: function() {
         request(options, callback)
 var messageArray = [];
