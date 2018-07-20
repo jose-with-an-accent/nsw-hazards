@@ -39,7 +39,7 @@ function callback(error, response, body) {
 
         twilio_client.messages.create({
             body: messageArray.join('\n'),
-            to: '+61414169906',
+            to: '+61403709671',
             from: '+61488844647'
         })
         .then((message) => {console.log("SID: " + message.sid)}).catch(
@@ -53,8 +53,8 @@ start: true,
 timeZone: 'Australia/Sydney'
 });
 function distance(lat2, lon2) {
-    var lat1 = -33.865143;
-    const lon1 = 151.209900;
+    const lat1 = -33.851020;
+    const lon1 = 150.899323;
     //lat1 is the location of sydney
     var p = 0.017453292519943295;    // Math.PI / 180
     var c = Math.cos;
