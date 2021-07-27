@@ -1,6 +1,6 @@
 const twilio = require('twilio');
-const acc_sid = "AC4b5b491f2b9d596ba3a2f4be0b7b738a";
-const auth_token = "4cee7a342ba50759b12bd8e154fc039e";
+const acc_sid = "XXXXXXX";
+const auth_token = "XXXXXXX";
 const request = require('request')
 const fs = require('fs');
 const cron = require('node-cron');
@@ -9,7 +9,7 @@ const options = {
     url : 'https://api.transport.nsw.gov.au/v1/live/hazards/incident/all',
     headers: {
         accept: 'application/json',
-        authorization: 'apikey TVEUMJ8aIJ0liPXq7KT1bIfaK1lNIpkPj25C'
+        authorization: 'apikey XXXXXXX'
     }
 };
 cron.schedule('*/3 * * * *', function() {
@@ -36,8 +36,8 @@ cron.schedule('*/3 * * * *', function() {
     if (messageArray.length != 0) {
         twilio_client.messages.create({
             body: messageArray.join('\n'),
-            to: '+61403709671',
-            from: '+61488844647'
+            to: '+XXXXXXX',
+            from: '+XXXXXXX'
         })
         .then((message) => {console.log("SID: " + message.sid)}).catch(
             e => { console.error('Got an error:', e.code, e.message); });
@@ -47,8 +47,8 @@ cron.schedule('*/3 * * * *', function() {
     }
 });
 function distance(lat2, lon2) {
-    const lat1 = -33.851020;
-    const lon1 = 150.899323;
+    const lat1 = XXXXXXX;
+    const lon1 = XXXXXXX;
     //lat1 is the location of sydney
     var p = 0.017453292519943295;    // Math.PI / 180
     var c = Math.cos;
